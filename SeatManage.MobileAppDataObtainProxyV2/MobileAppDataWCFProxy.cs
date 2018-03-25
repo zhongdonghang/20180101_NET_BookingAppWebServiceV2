@@ -1138,6 +1138,7 @@ namespace SeatManage.MobileAppDataObtainProxy
         }
         /// <summary>
         /// 获取预约座位的信息
+        /// zdh 20180325更改过
         /// </summary>
         /// <param name="seatNo"></param>
         /// <param name="roomNo"></param>
@@ -1145,18 +1146,20 @@ namespace SeatManage.MobileAppDataObtainProxy
         /// <returns></returns>
         public string GetSeatBespeakInfo(string seatNo, string roomNo, string bespeakTime)
         {
+          //  WriteLog.Write("school.IsSeatBespeak"+ school.IsSeatBespeak);
+         //WriteLog.Write("school.ConnectionString"+ school.ConnectionString);
             if (school.IsSeatBespeak && !string.IsNullOrEmpty(school.ConnectionString))
+            {
+                return WeChatWcfProxy.SeatProxy.GetSeatBespeakInfo(seatNo, roomNo, bespeakTime, school.ConnectionString);
+            }
+            try
             {
                 request = new SocketRequest();
                 request.RequestMethodType = "GetSeatBespeakInfo";
                 request.Parameters.Add(seatNo);
                 request.Parameters.Add(roomNo);
                 request.Parameters.Add(bespeakTime);
-                return CallService(request);
-            }
-            try
-            {
-                return WeChatWcfProxy.SeatProxy.GetSeatBespeakInfo(seatNo, roomNo, bespeakTime, school.ConnectionString);
+                return CallService(request);   
             }
             catch (Exception ex)
             {
@@ -1164,6 +1167,7 @@ namespace SeatManage.MobileAppDataObtainProxy
                 {
                     return WeChatWcfProxy.SeatProxy.GetSeatBespeakInfo(seatNo, roomNo, bespeakTime, school.ConnectionString);
                 }
+                WriteLog.Write(ex.ToString());
                 AJM_HandleResult result = new AJM_HandleResult();
                 result.Result = false;
                 result.Msg = "获取数据失败!";
@@ -1181,6 +1185,7 @@ namespace SeatManage.MobileAppDataObtainProxy
         {
             if (school.IsSeatBespeak && !string.IsNullOrEmpty(school.ConnectionString))
             {
+               // WriteLog.Write("获取座位当前状态GetSeatNowStatus--ConnectionString:"+ school.ConnectionString);
                 return WeChatWcfProxy.SeatProxy.GetSeatNowStatus(seatNo, roomNo, studentNo, school.ConnectionString);
             }
             try

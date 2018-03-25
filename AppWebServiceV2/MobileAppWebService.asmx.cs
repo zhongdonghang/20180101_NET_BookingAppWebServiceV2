@@ -26,9 +26,9 @@ namespace AppWebService
         /// </summary>
         public MobileAppWebService()
         {
-            myHeader.UserName = "zdh";
-            myHeader.PassWord = "zdh";
-            myHeader.SchoolNum = "20171203";
+            //myHeader.UserName = "zdh";
+            //myHeader.PassWord = "zdh";
+            //myHeader.SchoolNum = "20171203";
         }
 
 
@@ -717,6 +717,7 @@ namespace AppWebService
         {
             if (headerCheck.CheckSoapHeader(myHeader, true))
             {
+                WriteLog.Write(myHeader.SchoolNum);
                 IMobileAppDataObtianProxy obtainProxy = new MobileAppDataWCFProxy(myHeader.SchoolNum);
                 string r = obtainProxy.GetSeatBespeakInfo(seatNo, roomNo, bespeakTime);
                 obtainProxy.Dispose();
